@@ -1,7 +1,5 @@
 package chapter12;
 
-import com.sun.corba.se.spi.activation.Server;
-
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -14,7 +12,11 @@ import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.util.CharsetUtil;
-
+/**
+ * 要确保开启了telnet
+ * @author jonn
+ *
+ */
 public class FileServer {
 	
 	public void run(int port) throws Exception {
@@ -30,9 +32,11 @@ public class FileServer {
 
 				@Override
 				protected void initChannel(SocketChannel sc) throws Exception {
-					
+					//把文件内容（字符串）编码
 					sc.pipeline().addLast(new StringEncoder(CharsetUtil.UTF_8),
+							//按照回车换行符对数据报进行解码
 							new LineBasedFrameDecoder(1024),
+							//解码成字符串
 							new StringDecoder(CharsetUtil.UTF_8),
 							new FileServerHandler());
 				}
